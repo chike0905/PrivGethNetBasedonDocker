@@ -45,26 +45,27 @@ docker network create --driver=bridge --internal internalnet
 - `setup_nodes.sh` create a test directory to store test logs.
     - The name of the test directory is `YYYYmmdd-HHMMSS`.
     - The contents are as like followings;
-        - Data directory of node1 has ethereum and ethash for mining.
-        - Data directory of other node is just only as ethereum datadir.
+        - Data directory of each node has ethereum and ethash for mining.
     ```
     result/20200101-0000000/
-    ├── logs            : geth log on each node
+    ├── logs              : geth log on each node
+    │   ├── mergedlog.csv : merged log of each node
     │   ├── node1
     │   ├── node2
     │   └── node3
-    ├── node1           : Datadir for node1
-    │   ├── ethereum    : Ethereum Datadir
-    │   └── ethash      : Ethash Dir
-    ├── node2           : Ethereum datadir for node2
+    ├── node1             : Datadir for node1
+    │   ├── ethereum      : Ethereum Datadir
+    │   └── ethash        : Ethash Dir
+    ├── node2             : Ethereum datadir for node2
     ...
-    └── node3    : for node3
+    └── node3             : for node3
     ```
 
 ## ToDo
 - How to make topology?
     - (Temporary) Nodes connect to Node1.
 - How to mining?
-    - (Temporary) Node 1 is mining.
+    - (Temporary) All node is mining.
+    - Check how to reorg
 ## Licence
 WTFPL
