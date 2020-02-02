@@ -9,8 +9,18 @@ function launchnode(){
     # $1 nodennum
     # $2 bootnode enode
     mkdir $UNITDIR/node$1
-    geth --datadir $UNITDIR/node$1 init $TESTDIR/scripts/privnet.json #TODO: init by docker
-    docker run -d --net internalnet --name node$1 -v $UNITDIR/node$1:/root/.ethereum -v $TESTDIR/scripts:/root/scripts ethereum/client-go:v1.9.10 --networkid 114514 --verbosity 4 --syncmode "full" --bootnodes $2
+    mkdir $UNITDIR/node$1/ethereum
+    mkdir $UNITDIR/node$1/ethash
+    
+    # Setup Mining
+    # TODO: tmp copy from node1
+    cp $UNITDIR/node1/ethash/full-R23-0000000000000000 $UNITDIR/node$1/ethash/
+    GETHFORSETUP="docker run --rm --net internalnet --name setup -v "$UNITDIR"/node"$1"/ethereum:/root/.ethereum -v "$UNITDIR"/node"$1"/ethash:/root/.ethash -v "$TESTDIR"/scripts:/root/scripts ethereum/client-go:v1.9.10"
+    $GETHFORSETUP init /root/scripts/privnet.json
+    $GETHFORSETUP account new --password /root/scripts/password
+    
+    # Launch Node
+    docker run -d --net internalnet --name node$1 -v $UNITDIR/node$1/ethereum:/root/.ethereum -v $UNITDIR/node$1/ethash:/root/.ethash -v $TESTDIR/scripts:/root/scripts ethereum/client-go:v1.9.10 --networkid 114514 --verbosity 4 --syncmode "full" --mine --miner.threads 10 -bootnodes $2
     echo "Sleep "$INT" seconds for launch node"$1
     sleep $INT
 }
