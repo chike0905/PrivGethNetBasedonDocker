@@ -20,3 +20,6 @@ for i in $NODENAME
 do
     docker rm $i
 done
+
+echo "Merge Logs"
+python scripts/merge_logs.py $UNITDIR
