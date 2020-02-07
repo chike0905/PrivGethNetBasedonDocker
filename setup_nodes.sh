@@ -20,23 +20,16 @@ function launchnode(){
     $GETHFORSETUP account new --password /root/scripts/password
     
     # Launch Node
-    docker run -d --net internalnet --name node$1 -v $UNITDIR/node$1/ethereum:/root/.ethereum -v $UNITDIR/node$1/ethash:/root/.ethash -v $TESTDIR/scripts:/root/scripts ethereum/client-go:v1.9.10 --networkid 114514 --verbosity 4 --syncmode "full" --mine --miner.threads 10 -bootnodes $2
+    docker run -d --net internalnet --name $DATE-node$1 -v $UNITDIR/node$1/ethereum:/root/.ethereum -v $UNITDIR/node$1/ethash:/root/.ethash -v $TESTDIR/scripts:/root/scripts ethereum/client-go:v1.9.10 --networkid 114514 --verbosity 4 --syncmode "full" --mine --miner.threads 10 -bootnodes $2
     echo "Sleep "$INT" seconds for launch node"$1
     sleep $INT
 }
 
-function checkpeer(){
+function exec_on_node(){
     # $1 node ID
-    echo "Check Peer of Node"$1
-    docker exec -it node$1 sh -c "geth attach < /root/scripts/get_peers.js"
+    # $2 Exec parameters
+    docker exec -it $DATE-node$1 sh -c 'echo "'$2'" | geth attach' | gsed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2};5D)?)?[mGK]//g" | tail -n +10 | gsed -e '$d'
 }
-
-function checkblocknum(){
-    # $1 node ID
-    echo "Check BlockNumber of Node"$1
-    docker exec -it node$1 sh -c "geth attach < /root/scripts/get_blocknum.js" | tail -n 2 | head -n 1
-}
-
 
 mkdir $UNITDIR
 
@@ -51,22 +44,21 @@ $GETHFORSETUP init /root/scripts/privnet.json
 ## prepare mining
 ## TODO: make dag time is too long
 $GETHFORSETUP makedag 0 /root/.ethash
-#cp scripts/full-R23-0000000000000000 $UNITDIR/node1/ethash/
 echo "" > $TESTDIR/scripts/password
 $GETHFORSETUP account new --password /root/scripts/password
 
-docker run -d --net internalnet --name node1 -v $UNITDIR/node1/ethereum:/root/.ethereum -v $UNITDIR/node1/ethash:/root/.ethash -v $TESTDIR/scripts:/root/scripts ethereum/client-go:v1.9.10 --networkid 114514 --verbosity 4 --syncmode "full" --mine --miner.threads 10
+docker run -d --net internalnet --name $DATE-node001 -v $UNITDIR/node1/ethereum:/root/.ethereum -v $UNITDIR/node1/ethash:/root/.ethash -v $TESTDIR/scripts:/root/scripts ethereum/client-go:v1.9.10 --networkid 114514 --verbosity 4 --syncmode "full" --mine --miner.threads 10
 echo "Sleep "$INT" seconds for launch BootNode(Node1)"
 sleep $INT
 
 
 # Get Node1 enode
-NODE1_ENODE=$(docker exec -it node1 sh -c "geth attach < /root/scripts/get_enode.js" | grep enode | tr -d "\""| sed "s/@.*/@/g" | gsed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g")
-NODE1_IP=$(docker inspect --format '{{ .NetworkSettings.Networks.internalnet.IPAddress }}' node1)
+NODE1_ENODE=$(exec_on_node 001 "admin.nodeInfo" | grep enode | tr -d "\" "| sed "s/@.*/@/g" | tail -c +7)
+NODE1_IP=$(docker inspect --format '{{ .NetworkSettings.Networks.internalnet.IPAddress }}' $DATE-node001)
 NODE1=$NODE1_ENODE$NODE1_IP:30303
-echo "Node1 enode: "$NODE1
+echo "Node1 Enode: "$NODE1
 
-for i in $(seq 2 $NODENUM)
+for i in $(seq -f '%03g' 2 $NODENUM);
 do
     launchnode $i $NODE1
 done
@@ -74,17 +66,8 @@ done
 echo "waiting discover each nodes...("$INT" seconds)"
 sleep $INT
 
-echo "Check Peers"
-for i in $(seq 1 $NODENUM)
-do
-    checkpeer $i 
-done
+exec_on_node 001 "admin.peers"
+exec_on_node 002 "admin.peers"
 
-<<COMMENTOUT
-echo "Check BlockNum"
-for i in $(seq 1 $NODENUM)
-do
-    checkblocknum $i 
-done
-COMMENTOUT
 echo "Nodes started on " $UNITDIR
+echo "UNIT_NAME: "$DATE

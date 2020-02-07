@@ -31,15 +31,14 @@ docker network create --driver=bridge --internal internalnet
 ```
 ### Launch Nodes
 - Run `setup_nodes.sh` with setupping number of Nodes for test.
-    - **Note:** You should check other docker containers on your host. The `stop_node.sh` kills the all node on your host.
 ```sh
 ./setup_nodes.sh $NODENUM
 ```
 - In the end of running `setup_nodes.sh`, the script dumps the directory of the test.
 ### Stop Nodes
-- Run `stop_node.sh` with the directory path that dumped the end of `setup_nodes.sh`.
+- Run `stop_node.sh` with unit name that dumped the end of `setup_nodes.sh`.
 ```
-./stop_node.sh /the/path/that/dumped/by/setup/script
+./stop_node.sh $UNIT_NAME
 ```
 ### Dumped Files
 - `setup_nodes.sh` create a test directory to store test logs.
