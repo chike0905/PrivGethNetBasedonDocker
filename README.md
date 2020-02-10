@@ -44,6 +44,19 @@ docker network create --driver=bridge --internal internalnet
 ./setup_nodes_with_local_dag.sh $NODENUM
 ``` 
 
+### Setup and Each Connect Node via file
+- You can setup nodes and connection via topology file.
+    - The contents of topology file is like following(see also `sample_topology.txt`);
+    ```
+    SrcNodeId DistNodeId 
+    ```
+    - `SrcNodeId` node connnect to `DistNodeId` via `admin.addPeer()` in geth console.
+- You can launch nodes via `setup_topology.sh`
+    - The sctipt launch a number that is max node ID in topology file. 
+```
+./setup_topology.sh $PATH_TO_TOPOLOGY_FILE
+```
+
 ### Stop Nodes
 - Run `stop_node.sh` with unit name that dumped the end of `setup_nodes.sh`.
 ```
