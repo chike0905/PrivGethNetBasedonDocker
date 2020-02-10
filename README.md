@@ -9,17 +9,22 @@ When we develop an application that based on Ethereum, we want to test not only 
 ### Contents
 ```
 .
+├── README.md
 ├── result                        : result directory
+├── src                           : Directoty for tips
 ├── scripts
-│   ├── get_blocknum.js
-│   ├── get_enode.js
-│   ├── get_peers.js
 │   ├── password
+│   ├── ethash/                   : Directry for gen_dag.sh
+│   ├── merge_logs.py
 │   └── privnet.json              : Private Network params
-├── setup_nodes.sh                : setup nodes script
-└── stop_nodes.sh                 : stop nodes script
-
+├── gen_dag.sh										: Script for generate dag
+├── setup_nodes.sh                : Script for setup nodes 
+├── setup_nodes_with_local_dag.sh : Script for setup nodes with local dag 
+├── setup_topology.sh							: Script for setup topology
+├── sample_topology.txt						: Sample topology file
+└── stop_nodes.sh                 : Script for stop nodes 
 ```
+
 ### Set Up Docker Container & Network
 - Pull the container image of geth.
 ```
