@@ -11,7 +11,7 @@ if [ "$(uname)" == 'Darwin' ]; then
     alias sed="gsed"
 fi
 
-. src/launch_node.sh
+. src/launch_node_with_local_dag.sh
 
 function exec_on_node(){
     # $1 node ID

@@ -35,6 +35,15 @@ docker network create --driver=bridge --internal internalnet
 ./setup_nodes.sh $NODENUM
 ```
 - In the end of running `setup_nodes.sh`, the script dumps the directory of the test.
+
+### Generate Dag and Re-use
+- Run `gen_dag.sh` to generate dag file into `scripts/ethash`.
+- You can launch nodes without generating dag.
+    - Copy dag file `scripts/ethash/` 
+```
+./setup_nodes_with_local_dag.sh $NODENUM
+``` 
+
 ### Stop Nodes
 - Run `stop_node.sh` with unit name that dumped the end of `setup_nodes.sh`.
 ```
