@@ -1,9 +1,15 @@
-#! /bin/bash
+#!/bin/bash
 INT=10
 TESTDIR=$(pwd)
 DATE=$(date "+%Y%m%d-%H%M%S")
 UNITDIR=$TESTDIR/result/$DATE
 NODENUM=$1
+
+# For Gnu-sed on MacOS
+if [ "$(uname)" == 'Darwin' ]; then
+    shopt -s expand_aliases
+    alias sed="gsed"
+fi
 
 function LaunchNode(){
     # $1 Node ID
