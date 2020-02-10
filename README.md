@@ -17,7 +17,7 @@ When we develop an application that based on Ethereum, we want to test not only 
 │   ├── ethash/                   : Directry for gen_dag.sh
 │   ├── merge_logs.py
 │   └── privnet.json              : Private Network params
-├── gen_dag.sh										: Script for generate dag
+├── gen_dag.sh                    : Script for generate dag
 ├── setup_nodes.sh                : Script for setup nodes 
 ├── setup_nodes_with_local_dag.sh : Script for setup nodes with local dag 
 ├── setup_topology.sh             : Script for setup topology
