@@ -9,7 +9,6 @@ do
 done
 
 echo "Dumping Logs"
-NODENAME=$(docker ps -a --format "table {{.Names}}" | tail -n +2)
 mkdir $UNITDIR/logs
 for i in $NODENAME
 do
