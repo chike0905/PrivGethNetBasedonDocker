@@ -21,7 +21,7 @@ NODENUM=$(getMaxNodeIdInTopology $1)
 function exec_on_node(){
     # $1 node ID
     # $2 Exec parameters
-    docker exec -i $DATE-node$1 sh -c 'echo "'$2'" | geth attach' | gsed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2};5D)?)?[mGK]//g" | tail -n +10 | gsed -e '$d'
+    docker exec -i $DATE-node$1 sh -c 'echo "'$2'" | geth attach' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2};5D)?)?[mGK]//g" | tail -n +10 | sed -e '$d'
 }
 
 function get_enode(){ 
