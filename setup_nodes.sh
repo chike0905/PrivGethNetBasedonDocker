@@ -4,6 +4,7 @@ TESTDIR=$(pwd)
 DATE=$(date "+%Y%m%d-%H%M%S")
 UNITDIR=$TESTDIR/result/$DATE
 NODENUM=$1
+GETHOPTION=$2
 
 # For Gnu-sed on MacOS
 if [ "$(uname)" == 'Darwin' ]; then
@@ -29,7 +30,7 @@ function get_enode(){
 mkdir $UNITDIR
 
 echo "Run Node1 as BootNode"
-LaunchNode 001
+LaunchNode 001 "$GETHOPTION"
 
 # Get Node1 enode
 NODE1=$(get_enode 001)
@@ -37,7 +38,7 @@ echo "Node1 Enode: "$NODE1
 
 for i in $(seq -f '%03g' 2 $NODENUM);
 do
-    LaunchNode $i
+    LaunchNode $i "$GETHOPTION"
 done
 
 # TMP: all node connect to node 001

@@ -4,6 +4,7 @@ TESTDIR=$(pwd)
 DATE=$(date "+%Y%m%d-%H%M%S")
 UNITDIR=$TESTDIR/result/$DATE
 TOPOFILE=$1
+GETHOPTION=$2
 
 # For Gnu-sed on MacOS
 if [ "$(uname)" == 'Darwin' ]; then
@@ -59,7 +60,7 @@ function make_topology(){
 mkdir $UNITDIR
 
 echo "Run Node1 as BootNode"
-LaunchNode 001
+LaunchNode 001 "$GETHOPTION"
 
 # Get Node1 enode
 NODE1=$(get_enode 001)
@@ -67,7 +68,7 @@ echo "Node1 Enode: "$NODE1
 
 for i in $(seq -f '%03g' 2 $NODENUM);
 do
-    LaunchNode $i
+    LaunchNode $i "$GETHOPTION"
 done
 
 make_topology $TOPOFILE

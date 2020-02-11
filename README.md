@@ -36,8 +36,9 @@ docker network create --driver=bridge --internal internalnet
 ```
 ### Launch Nodes
 - Run `setup_nodes.sh` with setupping number of Nodes for test.
+  - Optional: You can set options for geth. The option that you set would be applied to all nodes.
 ```sh
-./setup_nodes.sh $NODENUM
+./setup_nodes.sh $NODENUM ($GETHOPTION)
 ```
 - In the end of running `setup_nodes.sh`, the script dumps the directory of the test.
 
@@ -46,7 +47,7 @@ docker network create --driver=bridge --internal internalnet
 - You can launch nodes without generating dag.
     - Copy dag file `scripts/ethash/` 
 ```
-./setup_nodes_with_local_dag.sh $NODENUM
+./setup_nodes_with_local_dag.sh $NODENUM ($GETHOPTION)
 ``` 
 
 ### Setup and Each Connect Node via file
@@ -59,7 +60,7 @@ docker network create --driver=bridge --internal internalnet
 - You can launch nodes via `setup_topology.sh`
     - The sctipt launch a number that is max node ID in topology file. 
 ```
-./setup_topology.sh $PATH_TO_TOPOLOGY_FILE
+./setup_topology.sh $PATH_TO_TOPOLOGY_FILE ($GETHOPTION)
 ```
 
 ### Stop Nodes
